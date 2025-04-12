@@ -46,16 +46,31 @@ private:
   int m_level{1};
 };
 
+class Monster : public Creature {
+public:
+  enum Type {
+    dragon,
+    orc,
+    slime,
+    max_types,
+  };
+
+  Monster(Type type) : Creature{monsterData[type]} {}
+
+private:
+  static inline Creature monsterData[]{
+      Creature{"dragon", 'D', 20, 4, 100},
+      Creature{"orc", 'o', 4, 2, 25},
+      Creature{"slime", 's', 1, 1, 10},
+  };
+
+  static_assert(max_types == std::ssize(monsterData));
+};
+
 int main() {
-  std::cout << "Enter your name: ";
-  std::string name;
-  std::cin >> name;
 
-  Player Alex{name};
-
-  std::cout << "Welcome, " << name << ".\n";
-  std::cout << "You have " << Alex.health() << " health and are carrying "
-            << Alex.gold() << " gold.\n";
+  Monster m{Monster::Type::orc};
+  std::cout << "A " << m.name() << " (" << m.symbol() << ") was created.\n";
 
   return 0;
 }
