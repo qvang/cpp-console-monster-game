@@ -127,7 +127,7 @@ void fightMonster(Player &p) {
       continue;
     }
 
-    if (input == 'f') {
+    if (input == 'f' || input == 'F') {
       attackPlayer(m, p);
 
       if (m.isDead())
@@ -136,7 +136,7 @@ void fightMonster(Player &p) {
       attackMonster(m, p);
     }
 
-    if (input == 'r') {
+    if (input == 'r' || input == 'R') {
       bool success = static_cast<bool>(Random::get(0, 1));
       if (success) {
         std::cout << "You successfully fled.\n";
@@ -144,11 +144,17 @@ void fightMonster(Player &p) {
       } else {
         std::cout << "You failed to flee.\n";
         attackMonster(m, p);
+        continue;
       }
     }
 
     ignoreLine();
   }
+}
+
+void gameOver(Player &player) {
+  std::cout << "You died at level " << player.level() << " and with "
+            << player.gold() << " gold.\n";
 }
 
 int main() {
@@ -157,10 +163,10 @@ int main() {
   Player player{getUserInput()};
   std::cout << "Welcome, " << player.name() << '\n';
 
+  // Game loop
   while (true) {
     if (player.isDead()) {
-      std::cout << "You died at level " << player.level() << " and with "
-                << player.gold() << " gold.\n";
+      gameOver(player);
       break;
     }
 
