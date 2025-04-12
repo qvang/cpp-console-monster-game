@@ -102,6 +102,10 @@ void attackMonster(Monster &m, Player &p) {
   std::cout << "The " << m.name() << " has hit you for " << m.dmg() << ".\n";
 }
 
+void ignoreLine() {
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
+
 void fightMonster(Player &p) {
 
   Monster m{Monster::getRandomMonster()};
@@ -117,8 +121,18 @@ void fightMonster(Player &p) {
     char input{};
     std::cin >> input;
 
+    if (!std::cin) {
+      std::cin.clear();
+      ignoreLine();
+      continue;
+    }
+
     if (input == 'f') {
       attackPlayer(m, p);
+
+      if (m.isDead())
+        break;
+
       attackMonster(m, p);
     }
 
@@ -132,6 +146,8 @@ void fightMonster(Player &p) {
         attackMonster(m, p);
       }
     }
+
+    ignoreLine();
   }
 }
 
