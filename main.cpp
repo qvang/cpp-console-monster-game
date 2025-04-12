@@ -1,3 +1,5 @@
+#include "random.h"
+#include <algorithm>
 #include <iostream>
 #include <string_view>
 
@@ -57,6 +59,11 @@ public:
 
   Monster(Type type) : Creature{monsterData[type]} {}
 
+  static Monster getRandomMonster() {
+
+    return Monster{static_cast<Type>(Random::get(0, max_types - 1))};
+  }
+
 private:
   static inline Creature monsterData[]{
       Creature{"dragon", 'D', 20, 4, 100},
@@ -69,8 +76,10 @@ private:
 
 int main() {
 
-  Monster m{Monster::Type::orc};
-  std::cout << "A " << m.name() << " (" << m.symbol() << ") was created.\n";
+  for (int i{0}; i < 10; ++i) {
+    Monster m{Monster::getRandomMonster()};
+    std::cout << "A " << m.name() << " (" << m.symbol() << ") was created.\n";
+  }
 
   return 0;
 }
